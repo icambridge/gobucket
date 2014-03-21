@@ -1,9 +1,5 @@
 package gobucket
 
-import (
-	"net/url"
-)
-
 const (
 	libraryVersion = "0.1"
 	defaultBaseURL = "https://bitbucket.org/api/"
@@ -16,15 +12,14 @@ func NewClient(r *Request) *Client {
 		r = NewRequest(nil)
 	}
 
-	baseURL, _ := url.Parse(defaultBaseURL)
 
-	return &Client{request: r, BaseURL: baseURL}
+	return &Client{request: r}
 
 }
 
 type Client struct {
-	BaseURL  *url.URL
 
 	request   *Request
-
 }
+
+

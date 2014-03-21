@@ -26,7 +26,7 @@ func setup() {
 	// gobucket client configured to use test server
 	client = NewClient(nil)
 	url, _ := url.Parse(server.URL)
-	client.BaseURL = url
+	client.request.BaseURL = url
 }
 
 // tearDown closes the test HTTP server.
@@ -40,7 +40,7 @@ func TestNewClient(t *testing.T) {
 
 	c := NewClient(nil)
 
-	if c.BaseURL.String() != defaultBaseURL {
-		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL.String(), defaultBaseURL)
+	if c.request == nil {
+		t.Error("Request shouldn't be empty")
 	}
 }
