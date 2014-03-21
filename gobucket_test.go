@@ -26,7 +26,7 @@ func setUp() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	// gobucket client configured to use test server
+	// src.gobucket client configured to use test server
 	client = NewClient(nil)
 	url, _ := url.Parse(server.URL)
 	client.BaseURL = url
