@@ -21,9 +21,10 @@ func NewClient(httpClient *http.Client) *Client {
 	}
 
 	baseURL, _ := url.Parse(defaultBaseURL)
-	c := Client{client: httpClient, UserAgent: userAgent, BaseURL: baseURL}
+	c := &Client{client: httpClient, UserAgent: userAgent, BaseURL: baseURL}
+	c.Repositories = &RepositoriesService{client: c}
 
-	return &c
+	return c
 }
 
 type Client struct {
@@ -33,6 +34,8 @@ type Client struct {
 	client *http.Client
 
 	UserAgent string
+
+	Repositories *RepositoriesService
 
 }
 

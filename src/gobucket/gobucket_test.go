@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"reflect"
 )
+
 var (
 	// mux is the HTTP request multiplexer used with the test server.
 	mux *http.ServeMux
@@ -20,7 +21,7 @@ var (
 	server *httptest.Server
 )
 
-func setup() {
+func setUp() {
 	// test server
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
@@ -37,7 +38,7 @@ func tearDown() {
 }
 
 func TestNewClient(t *testing.T) {
-	setup()
+	setUp()
 	defer tearDown()
 
 	c := NewClient(nil)
@@ -77,7 +78,7 @@ func TestClientNewRequest(t *testing.T) {
 }
 
 func TestDo_GET(t *testing.T) {
-	setup()
+	setUp()
 	defer tearDown()
 
 	type Foo struct {
@@ -103,10 +104,8 @@ func TestDo_GET(t *testing.T) {
 
 }
 
-
-
 func TestDo_POST(t *testing.T) {
-	setup()
+	setUp()
 	defer tearDown()
 
 	type Foo struct {
