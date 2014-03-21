@@ -1,5 +1,7 @@
 package gobucket
 
+
+
 type Repository struct {
 	Website     string `json:"website"`
 	Fork        bool   `json:"fork"`
@@ -9,5 +11,4 @@ type Repository struct {
 	AbsoluteUrl string `json:"absolute_url"`
 	Slug        string `json:"slug"`
 	Private     bool   `json:"is_private"`
-	Request     *Request
 }
