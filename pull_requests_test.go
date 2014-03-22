@@ -190,3 +190,54 @@ func TestPullRequestsService_GetBranch(t *testing.T) {
 		t.Errorf("Response body = %v, expected %v", resp, expected)
 	}
 }
+
+func TestPullRequestsService_Approve(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	apiHit := false
+
+	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/approve", func(w http.ResponseWriter, r *http.Request) {
+			if m := "POST"; m != r.Method {
+				t.Errorf("Request method = %v, expected %v", r.Method, m)
+			}
+			apiHit = true
+			fmt.Fprint(w, `{"status": "success"}`)
+		})
+
+	err := client.PullRequests.Approve("batman", "batcave", 123)
+
+	if err != nil {
+		t.Errorf("Expected no err, got %v", err)
+	}
+
+	if apiHit != true {
+		t.Errorf("Expected to hit api but didn't")
+	}
+}
+
+func TestPullRequestsService_Unapprove(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	apiHit := false
+
+	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/approve", func(w http.ResponseWriter, r *http.Request) {
+			if m := "DELETE"; m != r.Method {
+				t.Errorf("Request method = %v, expected %v", r.Method, m)
+			}
+			apiHit = true
+			fmt.Fprint(w, `{"status": "success"}`)
+		})
+
+	err := client.PullRequests.Unapprove("batman", "batcave", 123)
+
+	if err != nil {
+		t.Errorf("Expected no err, got %v", err)
+	}
+
+	if apiHit != true {
+		t.Errorf("Expected to hit api but didn't")
+	}
+}
+

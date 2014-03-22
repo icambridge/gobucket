@@ -8,6 +8,42 @@ type PullRequestsService struct {
 	client *Client
 }
 
+func (s *PullRequestsService) Approve(owner string, repo string, id int) error {
+	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/approve", owner, repo, id)
+
+	req, err := s.client.NewRequest("POST", url, nil)
+
+	if err != nil {
+		return err
+	}
+
+	err = s.client.Do(req, nil)
+
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
+
+func (s *PullRequestsService) Unapprove(owner string, repo string, id int) error {
+	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/approve", owner, repo, id)
+
+	req, err := s.client.NewRequest("DELETE", url, nil)
+
+	if err != nil {
+		return err
+	}
+
+	err = s.client.Do(req, nil)
+
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
+
 func (s *PullRequestsService) GetBranch(owner string, repo string, branch string) (*PullRequest, error) {
 
 	pullRequests, err := s.GetAll(owner, repo)
