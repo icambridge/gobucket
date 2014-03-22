@@ -23,7 +23,7 @@ func NewClient(httpClient *http.Client) *Client {
 	baseURL, _ := url.Parse(defaultBaseURL)
 	c := &Client{client: httpClient, UserAgent: userAgent, BaseURL: baseURL}
 	c.Repositories = &RepositoriesService{client: c}
-
+	c.PullRequests = &PullRequestsService{client: c}
 	return c
 }
 
@@ -36,6 +36,7 @@ type Client struct {
 	UserAgent string
 
 	Repositories *RepositoriesService
+	PullRequests *PullRequestsService
 
 }
 
@@ -49,7 +50,6 @@ func (r *Client) NewRequest(method string, urlString string, body interface{}) (
 	}
 
 	u := strings.TrimRight(r.BaseURL.String(), "/") + rel.String()
-
 	buf := new(bytes.Buffer)
 	if body != nil {
 		err := json.NewEncoder(buf).Encode(body)
@@ -73,7 +73,6 @@ func (r *Client) NewRequest(method string, urlString string, body interface{}) (
 func (c *Client) Do(req *http.Request, output interface {}) error {
 
 	resp, err := c.client.Do(req)
-
 	if err != nil {
 		return err
 	}
