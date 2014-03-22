@@ -14,11 +14,10 @@ const (
 	userAgent      = "gobucket/" + libraryVersion
 )
 
-func NewClient(usernameStr string, passwordStr string, httpClient *http.Client) *Client {
+func NewClient(usernameStr string, passwordStr string) *Client {
 
-	if httpClient == nil {
-		httpClient = http.DefaultClient
-	}
+	httpClient := http.DefaultClient
+
 
 	baseURL, _ := url.Parse(defaultBaseURL)
 

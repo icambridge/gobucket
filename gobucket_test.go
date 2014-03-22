@@ -27,7 +27,7 @@ func setUp() {
 	server = httptest.NewServer(mux)
 
 	// src.gobucket client configured to use test server
-	client = NewClient("", "", nil)
+	client = NewClient("", "")
 	url, _ := url.Parse(server.URL)
 	client.BaseURL = url
 }
@@ -41,7 +41,7 @@ func TestNewClient(t *testing.T) {
 	setUp()
 	defer tearDown()
 
-	c := NewClient("batman", "alfredletmein", nil)
+	c := NewClient("batman", "alfredletmein")
 
 	if c.username != "batman" {
 		t.Errorf("NewClient username = %v, expected %v", c.username, "batman")
@@ -61,7 +61,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestClientNewRequest(t *testing.T) {
-	c := NewClient("", "", nil)
+	c := NewClient("", "")
 
 	inURL, outURL := "/foo", defaultBaseURL+"/foo"
 	inBody, outBody := &Link{Href: "l"}, `{"href":"l"}`+"\n"
