@@ -68,7 +68,6 @@ func (c *Client) NewRequest(method string, urlString string, body interface{}) (
 		}
 	}
 
-
 	req, err := http.NewRequest(method, u, buf)
 
 	if err != nil {
@@ -88,10 +87,10 @@ func (c *Client) Do(req *http.Request, output interface {}) error {
 
 
 	resp, err := c.client.Do(req)
+
 	if err != nil {
 		return err
 	}
-
 	defer resp.Body.Close()
 
 	json.NewDecoder(resp.Body).Decode(output)

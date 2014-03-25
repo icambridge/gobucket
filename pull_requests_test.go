@@ -216,6 +216,33 @@ func TestPullRequestsService_Approve(t *testing.T) {
 	}
 }
 
+
+func TestPullRequestsService_Approve_LowerCase(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	apiHit := false
+
+	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/approve", func(w http.ResponseWriter, r *http.Request) {
+			if m := "POST"; m != r.Method {
+				t.Errorf("Request method = %v, expected %v", r.Method, m)
+			}
+			apiHit = true
+			fmt.Fprint(w, `{"status": "success"}`)
+		})
+
+	err := client.PullRequests.Approve("Batman", "batCave", 123)
+
+	if err != nil {
+		t.Errorf("Expected no err, got %v", err)
+	}
+
+	if apiHit != true {
+		t.Errorf("Expected to hit api but didn't")
+	}
+}
+
+
 func TestPullRequestsService_Unapprove(t *testing.T) {
 	setUp()
 	defer tearDown()

@@ -2,6 +2,7 @@ package gobucket
 
 import (
 	"fmt"
+	"strings"
 )
 
 type PullRequestsService struct {
@@ -9,7 +10,7 @@ type PullRequestsService struct {
 }
 
 func (s *PullRequestsService) Approve(owner string, repo string, id int) error {
-	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/approve", owner, repo, id)
+	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/approve", strings.ToLower(owner), strings.ToLower(repo), id)
 
 	req, err := s.client.NewRequest("POST", url, nil)
 
@@ -27,7 +28,7 @@ func (s *PullRequestsService) Approve(owner string, repo string, id int) error {
 }
 
 func (s *PullRequestsService) Unapprove(owner string, repo string, id int) error {
-	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/approve", owner, repo, id)
+	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/approve", strings.ToLower(owner), strings.ToLower(repo), id)
 
 	req, err := s.client.NewRequest("DELETE", url, nil)
 
