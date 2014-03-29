@@ -122,6 +122,8 @@ type PullRequest struct {
 	State             string           `json:"state"`
 	CreatedOn         string           `json:"created_on"`
 	UpdatedOn         string           `json:"updated_on"`
+	Reviewers         []User           `json:"reviewers"`
+	Participants	  []Participant    `json:"participants"`
 	Id                int              `json:"id"`
 }
 
@@ -136,4 +138,10 @@ type PullRequestLinks struct {
 	Activity Link `json:"activity"`
 	Diff     Link `json:"diff"`
 	Approve  Link `json:"approve"`
+}
+
+type Participant struct {
+	Role string `json:"role"`
+	User User `json:"user"`
+	Approved bool `json:"approved"`
 }
