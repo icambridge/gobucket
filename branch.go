@@ -1,6 +1,8 @@
 package gobucket
 
-type Commit struct {
+type BranchList map[string]*Branch
+
+type Branch struct {
 	Node string `json:"node"`
 	Files []File `json:"files"`
 	RawAuthor string `json:"raw_author"`
@@ -12,4 +14,8 @@ type Commit struct {
 	Branch string `json:"branch"`
 	Message string `json:"message"`
 	Size int `json:"size"`
+}
+
+type BranchName struct {
+	Name string `json:"name"`
 }

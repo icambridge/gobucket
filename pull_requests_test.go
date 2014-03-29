@@ -181,7 +181,7 @@ func TestPullRequestsService_GetBranch(t *testing.T) {
 	expected := 		&PullRequest{
 		Title: "Recognition / BatchBundle",
 		Source: PlaceInfo{
-			Branch: Branch{
+			Branch: BranchName{
 				Name:"thisone",
 			},
 		},

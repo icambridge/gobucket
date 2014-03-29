@@ -67,6 +67,23 @@ func (s *RepositoriesService) GetAll(user string) ([]*Repository, error) {
 	return output, nil
 }
 
+func (s *RepositoriesService) GetBranches(user string, repoName string) (map[string]*Branch, error) {
+
+	endPoint := fmt.Sprintf("/1.0/repositories/%s/%s/branches", user, repoName)
+	var branch BranchList
+
+	req, err := s.client.NewRequest("GET", endPoint, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	s.client.Do(req, &branch)
+
+	return branch, nil
+
+}
+
 // What is returned by the API.
 type Repository struct {
 	Scm         string          `json:"scm"`
