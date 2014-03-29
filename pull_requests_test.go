@@ -268,3 +268,23 @@ func TestPullRequestsService_Unapprove(t *testing.T) {
 	}
 }
 
+
+func TestPullRequest_GetApprovals(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	expectedUser :=  User{DisplayName: "Iain Cambridge"}
+
+
+	pr := PullRequest{}
+	pr.Participants = []Participant{
+		Participant{Role: "REVIEWER", User:expectedUser, Approved: true},
+		Participant{Role: "REVIEWER", User:User{DisplayName: "Johnny"}, Approved: false},
+	}
+
+	found := pr.GetApprovals()
+	expected := []User{expectedUser}
+	if !reflect.DeepEqual(found, expected) {
+		t.Errorf("Approvals = %v, expected %v", found, expected)
+	}
+}

@@ -145,3 +145,13 @@ type Participant struct {
 	User User `json:"user"`
 	Approved bool `json:"approved"`
 }
+
+func (pr *PullRequest) GetApprovals() []User {
+	approvals := []User{}
+	for _, p := range pr.Participants {
+		if p.Approved == true {
+			approvals = append(approvals, p.User)
+		}
+	}
+	return approvals
+}
