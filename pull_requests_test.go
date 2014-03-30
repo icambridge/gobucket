@@ -340,3 +340,30 @@ func TestPullRequest_GetApprovals(t *testing.T) {
 	}
 }
 
+
+func TestPullRequest_GetOwner(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	pr := PullRequest{}
+	pr.Destination.Repository.FullName = "batman/cave-system"
+	owner := pr.GetOwner()
+	expected := "batman"
+	if owner != expected {
+		t.Errorf("Expected %v, got %v", expected, owner)
+	}
+}
+
+func TestPullRequest_GetRepo(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	pr := PullRequest{}
+	pr.Destination.Repository.FullName = "batman/cave-system"
+	owner := pr.GetRepoName()
+	expected := "cave-system"
+	if owner != expected {
+		t.Errorf("Expected %v, got %v", expected, owner)
+	}
+}
+
