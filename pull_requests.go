@@ -194,7 +194,7 @@ func (pr *PullRequest) GetOwner() string {
 
 	parts := strings.Split(pr.Destination.Repository.FullName ,"/")
 
-	if len(parts) < 1 {
+	if len(parts) < 1 || parts[0] == "" {
 		return "unknown owner"
 	}
 

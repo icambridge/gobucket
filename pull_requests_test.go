@@ -353,6 +353,17 @@ func TestPullRequest_GetOwner(t *testing.T) {
 		t.Errorf("Expected %v, got %v", expected, owner)
 	}
 }
+func TestPullRequest_GetOwner_Unknown(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	pr := PullRequest{}
+	owner := pr.GetOwner()
+	expected := "unknown owner"
+	if owner != expected {
+		t.Errorf("Expected %v, got %v", expected, owner)
+	}
+}
 
 func TestPullRequest_GetRepo(t *testing.T) {
 	setUp()
@@ -360,10 +371,21 @@ func TestPullRequest_GetRepo(t *testing.T) {
 
 	pr := PullRequest{}
 	pr.Destination.Repository.FullName = "batman/cave-system"
-	owner := pr.GetRepoName()
+	repo := pr.GetRepoName()
 	expected := "cave-system"
-	if owner != expected {
-		t.Errorf("Expected %v, got %v", expected, owner)
+	if repo != expected {
+		t.Errorf("Expected %v, got %v", expected, repo)
+	}
+}
+func TestPullRequest_GetRepo_Unknown(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	pr := PullRequest{}
+	repo := pr.GetRepoName()
+	expected := "unknown repo"
+	if repo != expected {
+		t.Errorf("Expected %v, got %v", expected, repo)
 	}
 }
 
