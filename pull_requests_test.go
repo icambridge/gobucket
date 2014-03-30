@@ -256,7 +256,7 @@ func TestPullRequestsService_Merge(t *testing.T) {
 			fmt.Fprint(w, `{"status": "success"}`)
 		})
 
-	err := client.PullRequests.Merge("Batman", "batCave", 123)
+	err := client.PullRequests.Merge("Batman", "batCave", 123, "Merge baby")
 
 	if err != nil {
 		t.Errorf("Expected no err, got %v", err)

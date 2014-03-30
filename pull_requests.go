@@ -120,10 +120,12 @@ func (s *PullRequestsService) GetAll(owner string, repo string) ([]*PullRequest,
 	return output, nil
 }
 
-func (s *PullRequestsService) Merge(owner string, repo string, id int) error {
+func (s *PullRequestsService) Merge(owner string, repo string, id int, message string) error {
 
 	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/merge", strings.ToLower(owner), strings.ToLower(repo), id)
-	req, err := s.client.NewRequest("POST", url, nil)
+	body := fmt.Sprintf("message=%s", message)
+
+	req, err := s.client.NewRequest("POST", url, body)
 
 	if err != nil {
 		return err

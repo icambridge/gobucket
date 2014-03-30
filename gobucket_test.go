@@ -14,7 +14,7 @@ var (
 	// mux is the HTTP request multiplexer used with the test server.
 	mux *http.ServeMux
 
-	// client is the GitHub client being tested.
+	// client is the Bitbucket client being tested.
 	client *Client
 
 	// server is a test HTTP server used to provide mock API responses.
@@ -84,6 +84,32 @@ func TestClientNewRequest(t *testing.T) {
 		t.Errorf("NewRequest() User-Agent = %v, expected %v", userAgent, c.UserAgent)
 	}
 }
+
+func TestClientNewRequest_String(t *testing.T) {
+	c := NewClient("", "")
+
+	inURL, outURL := "/foo", defaultBaseURL+"/foo"
+	inBody, outBody := "message=test", "message=test"
+	req, _ := c.NewRequest("GET", inURL, inBody)
+
+	// test that relative URL was expanded
+	if req.URL.String() != outURL {
+		t.Errorf("NewRequest(%v) URL = %v, expected %v", inURL, req.URL, outURL)
+	}
+
+	// test that body was JSON encoded
+	body, _ := ioutil.ReadAll(req.Body)
+	if string(body) != outBody {
+		t.Errorf("NewRequest(%v) Body = %v, expected %v", inBody, string(body), outBody)
+	}
+
+	// test that default user-agent is attached to the request
+	userAgent := req.Header.Get("User-Agent")
+	if c.UserAgent != userAgent {
+		t.Errorf("NewRequest() User-Agent = %v, expected %v", userAgent, c.UserAgent)
+	}
+}
+
 
 func TestDo_GET(t *testing.T) {
 	setUp()

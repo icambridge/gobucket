@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"bytes"
 	"strings"
+//	"reflect"
 )
 
 const (
@@ -62,11 +63,17 @@ func (c *Client) NewRequest(method string, urlString string, body interface{}) (
 	u := strings.TrimRight(c.BaseURL.String(), "/") + rel.String()
 	buf := new(bytes.Buffer)
 	if body != nil {
-		err := json.NewEncoder(buf).Encode(body)
-		if err != nil {
-			return nil, err
+		if str, ok := body.(string); ok {
+			buf.WriteString(str)
+		} else {
+			err := json.NewEncoder(buf).Encode(body)
+			if err != nil {
+				return nil, err
+			}
 		}
+
 	}
+
 
 	req, err := http.NewRequest(method, u, buf)
 
