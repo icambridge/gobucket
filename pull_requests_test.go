@@ -242,6 +242,31 @@ func TestPullRequestsService_Approve_LowerCase(t *testing.T) {
 	}
 }
 
+func TestPullRequestsService_Merge(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	apiHit := false
+
+	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/merge", func(w http.ResponseWriter, r *http.Request) {
+			if m := "POST"; m != r.Method {
+				t.Errorf("Request method = %v, expected %v", r.Method, m)
+			}
+			apiHit = true
+			fmt.Fprint(w, `{"status": "success"}`)
+		})
+
+	err := client.PullRequests.Merge("Batman", "batCave", 123)
+
+	if err != nil {
+		t.Errorf("Expected no err, got %v", err)
+	}
+
+	if apiHit != true {
+		t.Errorf("Expected to hit api but didn't")
+	}
+}
+
 
 func TestPullRequestsService_Unapprove(t *testing.T) {
 	setUp()
@@ -268,6 +293,32 @@ func TestPullRequestsService_Unapprove(t *testing.T) {
 	}
 }
 
+func TestPullRequest_GetById(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	apiHit := false
+
+	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123", func(w http.ResponseWriter, r *http.Request) {
+			if m := "GET"; m != r.Method {
+				t.Errorf("Request method = %v, expected %v", r.Method, m)
+			}
+			apiHit = true
+			fmt.Fprint(w, `{"title": "Recognition / GenericBundle"}`)
+		})
+	resp, err := client.PullRequests.GetById("batman", "batcave", 123)
+
+	if err != nil {
+		t.Errorf("Expected no err, got %v", err)
+	}
+
+	expected := 		&PullRequest{
+		Title: "Recognition / GenericBundle",
+	}
+	if !reflect.DeepEqual(resp, expected) {
+		t.Errorf("Response body = %v, expected %v", resp, expected)
+	}
+}
 
 func TestPullRequest_GetApprovals(t *testing.T) {
 	setUp()
@@ -288,3 +339,4 @@ func TestPullRequest_GetApprovals(t *testing.T) {
 		t.Errorf("Approvals = %v, expected %v", found, expected)
 	}
 }
+

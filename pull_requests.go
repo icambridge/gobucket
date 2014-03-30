@@ -63,6 +63,24 @@ func (s *PullRequestsService) GetBranch(owner string, repo string, branch string
 	return nil, nil
 }
 
+func (s *PullRequestsService) GetById(owner string, repo string, id int) (*PullRequest, error) {
+	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d", owner, repo, id)
+	req, err := s.client.NewRequest("GET", url, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var pullRequest PullRequest
+	err = s.client.Do(req, &pullRequest)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pullRequest, nil
+}
+
 func (s *PullRequestsService) GetAll(owner string, repo string) ([]*PullRequest, error) {
 	output := []*PullRequest{}
 	count := 0
@@ -84,8 +102,6 @@ func (s *PullRequestsService) GetAll(owner string, repo string) ([]*PullRequest,
 			return nil, err
 		}
 
-
-
 		repoValues := len(pullRequests.Values)
 
 		if repoValues <= 0 {
@@ -102,6 +118,24 @@ func (s *PullRequestsService) GetAll(owner string, repo string) ([]*PullRequest,
 		page++
 	}
 	return output, nil
+}
+
+func (s *PullRequestsService) Merge(owner string, repo string, id int) error {
+
+	url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/%d/merge", strings.ToLower(owner), strings.ToLower(repo), id)
+	req, err := s.client.NewRequest("POST", url, nil)
+
+	if err != nil {
+		return err
+	}
+
+	err = s.client.Do(req, nil)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type PullRequestList struct {
@@ -154,4 +188,33 @@ func (pr *PullRequest) GetApprovals() []User {
 		}
 	}
 	return approvals
+}
+
+func (pr *PullRequest) GetOwner() string {
+
+	parts := strings.Split(pr.Destination.Repository.FullName ,"/")
+
+	if len(parts) < 1 {
+		return "unknown owner"
+	}
+
+	return parts[0]
+}
+
+func (pr *PullRequest) GetRepoName() string {
+
+	parts := strings.Split(pr.Destination.Repository.FullName ,"/")
+
+	if len(parts) < 2 {
+		return "unknown repo"
+	}
+
+	return parts[1]
+}
+
+type PullRequestMerge struct {
+	Title string `json:"title"`
+	Description string `json:"title"`
+	Source PlaceInfo `json:"source"`
+	Destination PlaceInfo `json:"destination"`
 }
