@@ -87,7 +87,7 @@ func (s *PullRequestsService) GetAll(owner string, repo string) ([]*PullRequest,
 	page := 1
 
 	for {
-		url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/?page=%d", owner, repo, page)
+		url := fmt.Sprintf("/2.0/repositories/%s/%s/pullrequests/?page=%d", strings.ToLower(owner), strings.ToLower(repo), page)
 
 		req, err := s.client.NewRequest("GET", url, nil)
 

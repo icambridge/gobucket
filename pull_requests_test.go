@@ -99,6 +99,98 @@ func TestPullRequestsService_GetAll(t *testing.T) {
 	}
 }
 
+func TestPullRequestsService_GetAll_ToLower(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/", func(w http.ResponseWriter, r *http.Request) {
+			if m := "GET"; m != r.Method {
+				t.Errorf("Request method = %v, expected %v", r.Method, m)
+			}
+			if r.URL.Query().Get("page") == "1" {
+				fmt.Fprint(w, `{
+  "pagelen": 10,
+  "next": "https://bitbucket.org/api/2.0/repositories/batman/?page=2",
+  "values": [
+    {
+      "title": "Recognition / GenericBundle"
+    },
+    {
+      "title": "Recognition / ResellerBundle"
+    },
+    {
+      "title": "Recognition / CatalogueBundle"
+    },
+    {
+      "title": "Recognition / Recognition Service"
+    },
+    {
+      "title": "Recognition / BatchBundle"
+    },
+    {
+      "title": "Recognition / Image Service"
+    },
+    {
+      "title": "Recognition / Super User"
+    },
+    {
+      "title": "Utility / Phingistrano"
+    },
+    {
+      "title": "Internal / GIT Hooks"
+    },
+    {
+      "title": "Internal / Bare Project Template"
+    }
+  ],
+  "page": 1,
+  "size": 11
+}`)
+			} else {
+				fmt.Fprint(w, `{
+  "pagelen": 1,
+  "values": [
+    {
+      "title": "Recognition / ClientBundle"
+    }
+  ],
+  "page": 2,
+  "size": 11
+}`)
+			}
+		})
+
+	resp, err := client.PullRequests.GetAll("Batman", "batcave")
+
+	if err != nil {
+		t.Errorf("Expected no err, got %v", err)
+	}
+
+	respLen := len(resp);
+
+	if respLen != 11 {
+		t.Errorf("Response length = %v, expected %v", respLen, 11)
+	}
+
+	expected := []*PullRequest{
+		&PullRequest{Title: "Recognition / GenericBundle"},
+		&PullRequest{Title: "Recognition / ResellerBundle"},
+		&PullRequest{Title: "Recognition / CatalogueBundle"},
+		&PullRequest{Title: "Recognition / Recognition Service"},
+		&PullRequest{Title: "Recognition / BatchBundle"},
+		&PullRequest{Title: "Recognition / Image Service"},
+		&PullRequest{Title: "Recognition / Super User"},
+		&PullRequest{Title: "Utility / Phingistrano"},
+		&PullRequest{Title: "Internal / GIT Hooks"},
+		&PullRequest{Title: "Internal / Bare Project Template"},
+		&PullRequest{Title: "Recognition / ClientBundle"},
+	}
+
+	if !reflect.DeepEqual(resp, expected) {
+		t.Errorf("Response body = %v, expected %v", resp, expected)
+	}
+}
+
 
 func TestPullRequestsService_GetBranch(t *testing.T) {
 	setUp()
