@@ -51,14 +51,14 @@ func (s *RepositoriesService) GetAll(user string) ([]*Repository, error) {
 		repoValues := len(repositories.Values)
 
 		if repoValues <= 0 {
-			break;
+			break
 		}
 
 		output = append(output, repositories.Values...)
 		count += repoValues
 
 		if count >= repositories.Size {
-			break;
+			break
 		}
 
 		page++
@@ -115,19 +115,19 @@ type HookRepository struct {
 }
 
 type RepositoryLinks struct {
-	Watchers Link `json:"watchers"`
-	Commits Link `json:"commits"`
-	Self Link `json:"self"`
-	Html Link `json:"html"`
-	Avatar Link `json:"avatar"`
-	Forks Link `json:"fork"`
-	Clone []NamedLink `json:"clone"`
-	PullRequests Link `json:"pullrequests"`
+	Watchers     Link        `json:"watchers"`
+	Commits      Link        `json:"commits"`
+	Self         Link        `json:"self"`
+	Html         Link        `json:"html"`
+	Avatar       Link        `json:"avatar"`
+	Forks        Link        `json:"fork"`
+	Clone        []NamedLink `json:"clone"`
+	PullRequests Link        `json:"pullrequests"`
 }
 
 type RepositoriesList struct {
-	PageLen int          `json:"pagelen"`
-	Values []*Repository  `json:"values"`
-	Page    int          `json:"page"`
-	Size    int          `json:"size"`
+	PageLen int           `json:"pagelen"`
+	Values  []*Repository `json:"values"`
+	Page    int           `json:"page"`
+	Size    int           `json:"size"`
 }

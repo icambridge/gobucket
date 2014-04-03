@@ -1,10 +1,10 @@
 package gobucket
 
 import (
-	"net/http"
-	"testing"
 	"fmt"
+	"net/http"
 	"reflect"
+	"testing"
 )
 
 func TestPullRequestsService_GetAll(t *testing.T) {
@@ -12,11 +12,11 @@ func TestPullRequestsService_GetAll(t *testing.T) {
 	defer tearDown()
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/", func(w http.ResponseWriter, r *http.Request) {
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			if r.URL.Query().Get("page") == "1" {
-				fmt.Fprint(w, `{
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprint(w, `{
   "pagelen": 10,
   "next": "https://bitbucket.org/api/2.0/repositories/batman/?page=2",
   "values": [
@@ -54,8 +54,8 @@ func TestPullRequestsService_GetAll(t *testing.T) {
   "page": 1,
   "size": 11
 }`)
-			} else {
-				fmt.Fprint(w, `{
+		} else {
+			fmt.Fprint(w, `{
   "pagelen": 1,
   "values": [
     {
@@ -65,8 +65,8 @@ func TestPullRequestsService_GetAll(t *testing.T) {
   "page": 2,
   "size": 11
 }`)
-			}
-		})
+		}
+	})
 
 	resp, err := client.PullRequests.GetAll("batman", "batcave")
 
@@ -74,7 +74,7 @@ func TestPullRequestsService_GetAll(t *testing.T) {
 		t.Errorf("Expected no err, got %v", err)
 	}
 
-	respLen := len(resp);
+	respLen := len(resp)
 
 	if respLen != 11 {
 		t.Errorf("Response length = %v, expected %v", respLen, 11)
@@ -104,11 +104,11 @@ func TestPullRequestsService_GetAll_ToLower(t *testing.T) {
 	defer tearDown()
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/", func(w http.ResponseWriter, r *http.Request) {
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			if r.URL.Query().Get("page") == "1" {
-				fmt.Fprint(w, `{
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprint(w, `{
   "pagelen": 10,
   "next": "https://bitbucket.org/api/2.0/repositories/batman/?page=2",
   "values": [
@@ -146,8 +146,8 @@ func TestPullRequestsService_GetAll_ToLower(t *testing.T) {
   "page": 1,
   "size": 11
 }`)
-			} else {
-				fmt.Fprint(w, `{
+		} else {
+			fmt.Fprint(w, `{
   "pagelen": 1,
   "values": [
     {
@@ -157,8 +157,8 @@ func TestPullRequestsService_GetAll_ToLower(t *testing.T) {
   "page": 2,
   "size": 11
 }`)
-			}
-		})
+		}
+	})
 
 	resp, err := client.PullRequests.GetAll("Batman", "batcave")
 
@@ -166,7 +166,7 @@ func TestPullRequestsService_GetAll_ToLower(t *testing.T) {
 		t.Errorf("Expected no err, got %v", err)
 	}
 
-	respLen := len(resp);
+	respLen := len(resp)
 
 	if respLen != 11 {
 		t.Errorf("Response length = %v, expected %v", respLen, 11)
@@ -191,17 +191,16 @@ func TestPullRequestsService_GetAll_ToLower(t *testing.T) {
 	}
 }
 
-
 func TestPullRequestsService_GetBranch(t *testing.T) {
 	setUp()
 	defer tearDown()
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/", func(w http.ResponseWriter, r *http.Request) {
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			if r.URL.Query().Get("page") == "1" {
-				fmt.Fprint(w, `{
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprint(w, `{
   "pagelen": 10,
   "next": "https://bitbucket.org/api/2.0/repositories/batman/?page=2",
   "values": [
@@ -249,8 +248,8 @@ func TestPullRequestsService_GetBranch(t *testing.T) {
   "page": 1,
   "size": 11
 }`)
-			} else {
-				fmt.Fprint(w, `{
+		} else {
+			fmt.Fprint(w, `{
   "pagelen": 1,
   "values": [
     {
@@ -261,8 +260,8 @@ func TestPullRequestsService_GetBranch(t *testing.T) {
   "page": 2,
   "size": 11
 }`)
-			}
-		})
+		}
+	})
 
 	resp, err := client.PullRequests.GetBranch("batman", "batcave", "thisone")
 
@@ -270,11 +269,11 @@ func TestPullRequestsService_GetBranch(t *testing.T) {
 		t.Errorf("Expected no err, got %v", err)
 	}
 
-	expected := 		&PullRequest{
+	expected := &PullRequest{
 		Title: "Recognition / BatchBundle",
 		Source: PlaceInfo{
 			Branch: BranchName{
-				Name:"thisone",
+				Name: "thisone",
 			},
 		},
 	}
@@ -290,12 +289,12 @@ func TestPullRequestsService_Approve(t *testing.T) {
 	apiHit := false
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/approve", func(w http.ResponseWriter, r *http.Request) {
-			if m := "POST"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			apiHit = true
-			fmt.Fprint(w, `{"status": "success"}`)
-		})
+		if m := "POST"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		apiHit = true
+		fmt.Fprint(w, `{"status": "success"}`)
+	})
 
 	err := client.PullRequests.Approve("batman", "batcave", 123)
 
@@ -308,7 +307,6 @@ func TestPullRequestsService_Approve(t *testing.T) {
 	}
 }
 
-
 func TestPullRequestsService_Approve_LowerCase(t *testing.T) {
 	setUp()
 	defer tearDown()
@@ -316,12 +314,12 @@ func TestPullRequestsService_Approve_LowerCase(t *testing.T) {
 	apiHit := false
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/approve", func(w http.ResponseWriter, r *http.Request) {
-			if m := "POST"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			apiHit = true
-			fmt.Fprint(w, `{"status": "success"}`)
-		})
+		if m := "POST"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		apiHit = true
+		fmt.Fprint(w, `{"status": "success"}`)
+	})
 
 	err := client.PullRequests.Approve("Batman", "batCave", 123)
 
@@ -341,12 +339,12 @@ func TestPullRequestsService_Merge(t *testing.T) {
 	apiHit := false
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/merge", func(w http.ResponseWriter, r *http.Request) {
-			if m := "POST"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			apiHit = true
-			fmt.Fprint(w, `{"status": "success"}`)
-		})
+		if m := "POST"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		apiHit = true
+		fmt.Fprint(w, `{"status": "success"}`)
+	})
 
 	err := client.PullRequests.Merge("Batman", "batCave", 123, "Merge baby")
 
@@ -359,7 +357,6 @@ func TestPullRequestsService_Merge(t *testing.T) {
 	}
 }
 
-
 func TestPullRequestsService_Unapprove(t *testing.T) {
 	setUp()
 	defer tearDown()
@@ -367,12 +364,12 @@ func TestPullRequestsService_Unapprove(t *testing.T) {
 	apiHit := false
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123/approve", func(w http.ResponseWriter, r *http.Request) {
-			if m := "DELETE"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			apiHit = true
-			fmt.Fprint(w, `{"status": "success"}`)
-		})
+		if m := "DELETE"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		apiHit = true
+		fmt.Fprint(w, `{"status": "success"}`)
+	})
 
 	err := client.PullRequests.Unapprove("batman", "batcave", 123)
 
@@ -392,19 +389,19 @@ func TestPullRequest_GetById(t *testing.T) {
 	apiHit := false
 
 	mux.HandleFunc("/2.0/repositories/batman/batcave/pullrequests/123", func(w http.ResponseWriter, r *http.Request) {
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			apiHit = true
-			fmt.Fprint(w, `{"title": "Recognition / GenericBundle"}`)
-		})
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		apiHit = true
+		fmt.Fprint(w, `{"title": "Recognition / GenericBundle"}`)
+	})
 	resp, err := client.PullRequests.GetById("batman", "batcave", 123)
 
 	if err != nil {
 		t.Errorf("Expected no err, got %v", err)
 	}
 
-	expected := 		&PullRequest{
+	expected := &PullRequest{
 		Title: "Recognition / GenericBundle",
 	}
 	if !reflect.DeepEqual(resp, expected) {
@@ -416,13 +413,12 @@ func TestPullRequest_GetApprovals(t *testing.T) {
 	setUp()
 	defer tearDown()
 
-	expectedUser :=  User{DisplayName: "Iain Cambridge"}
-
+	expectedUser := User{DisplayName: "Iain Cambridge"}
 
 	pr := PullRequest{}
 	pr.Participants = []Participant{
-		Participant{Role: "REVIEWER", User:expectedUser, Approved: true},
-		Participant{Role: "REVIEWER", User:User{DisplayName: "Johnny"}, Approved: false},
+		Participant{Role: "REVIEWER", User: expectedUser, Approved: true},
+		Participant{Role: "REVIEWER", User: User{DisplayName: "Johnny"}, Approved: false},
 	}
 
 	found := pr.GetApprovals()
@@ -431,7 +427,6 @@ func TestPullRequest_GetApprovals(t *testing.T) {
 		t.Errorf("Approvals = %v, expected %v", found, expected)
 	}
 }
-
 
 func TestPullRequest_GetOwner(t *testing.T) {
 	setUp()
@@ -480,4 +475,3 @@ func TestPullRequest_GetRepo_Unknown(t *testing.T) {
 		t.Errorf("Expected %v, got %v", expected, repo)
 	}
 }
-

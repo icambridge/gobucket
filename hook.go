@@ -17,13 +17,12 @@ func GetHookData(payload []byte) (*Hook, error) {
 	return &h, nil
 }
 
-
 type Hook struct {
 	Repository HookRepository `json:"repository"`
-	Truncated  bool       `json:"truncated"`
-	Commits    []Commit   `json:"commits"`
-	ConnonUrl  string     `json:"canon_url"`
-	User       string     `json:"user"`
+	Truncated  bool           `json:"truncated"`
+	Commits    []Commit       `json:"commits"`
+	ConnonUrl  string         `json:"canon_url"`
+	User       string         `json:"user"`
 }
 
 type Callback interface {
@@ -43,4 +42,3 @@ func (o *HookObserver) Process(h *Hook) {
 		c.Exec(h)
 	}
 }
-

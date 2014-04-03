@@ -105,14 +105,14 @@ func (s *PullRequestsService) GetAll(owner string, repo string) ([]*PullRequest,
 		repoValues := len(pullRequests.Values)
 
 		if repoValues <= 0 {
-			break;
+			break
 		}
 
 		output = append(output, pullRequests.Values...)
 		count += repoValues
 
 		if count >= pullRequests.Size {
-			break;
+			break
 		}
 
 		page++
@@ -159,10 +159,9 @@ type PullRequest struct {
 	CreatedOn         string           `json:"created_on"`
 	UpdatedOn         string           `json:"updated_on"`
 	Reviewers         []User           `json:"reviewers"`
-	Participants	  []Participant    `json:"participants"`
+	Participants      []Participant    `json:"participants"`
 	Id                int              `json:"id"`
 }
-
 
 type PullRequestLinks struct {
 	Decline  Link `json:"decline"`
@@ -177,9 +176,9 @@ type PullRequestLinks struct {
 }
 
 type Participant struct {
-	Role string `json:"role"`
-	User User `json:"user"`
-	Approved bool `json:"approved"`
+	Role     string `json:"role"`
+	User     User   `json:"user"`
+	Approved bool   `json:"approved"`
 }
 
 func (pr *PullRequest) GetApprovals() []User {
@@ -194,7 +193,7 @@ func (pr *PullRequest) GetApprovals() []User {
 
 func (pr *PullRequest) GetOwner() string {
 
-	parts := strings.Split(pr.Destination.Repository.FullName ,"/")
+	parts := strings.Split(pr.Destination.Repository.FullName, "/")
 
 	if len(parts) < 1 || parts[0] == "" {
 		return "unknown owner"
@@ -205,7 +204,7 @@ func (pr *PullRequest) GetOwner() string {
 
 func (pr *PullRequest) GetRepoName() string {
 
-	parts := strings.Split(pr.Destination.Repository.FullName ,"/")
+	parts := strings.Split(pr.Destination.Repository.FullName, "/")
 
 	if len(parts) < 2 {
 		return "unknown repo"
@@ -215,8 +214,8 @@ func (pr *PullRequest) GetRepoName() string {
 }
 
 type PullRequestMerge struct {
-	Title string `json:"title"`
-	Description string `json:"title"`
-	Source PlaceInfo `json:"source"`
+	Title       string    `json:"title"`
+	Description string    `json:"title"`
+	Source      PlaceInfo `json:"source"`
 	Destination PlaceInfo `json:"destination"`
 }

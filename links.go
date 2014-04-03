@@ -10,8 +10,6 @@ type NamedLink struct {
 }
 
 type SelfLinks struct {
-	Self Link `json:"self"`
+	Self   Link `json:"self"`
 	Avatar Link `json:"avatar"`
 }
-
-

@@ -1,12 +1,12 @@
 package gobucket
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/url"
-	"encoding/json"
-	"bytes"
 	"strings"
-//	"reflect"
+	//	"reflect"
 )
 
 const (
@@ -19,15 +19,14 @@ func NewClient(usernameStr string, passwordStr string) *Client {
 
 	httpClient := http.DefaultClient
 
-
 	baseURL, _ := url.Parse(defaultBaseURL)
 
 	c := &Client{
-		client: httpClient,
+		client:    httpClient,
 		UserAgent: userAgent,
-		BaseURL: baseURL,
-		username: usernameStr,
-		password: passwordStr,
+		BaseURL:   baseURL,
+		username:  usernameStr,
+		password:  passwordStr,
 	}
 
 	c.Repositories = &RepositoriesService{client: c}
@@ -36,8 +35,7 @@ func NewClient(usernameStr string, passwordStr string) *Client {
 }
 
 type Client struct {
-
-	BaseURL  *url.URL
+	BaseURL *url.URL
 
 	client *http.Client
 
@@ -48,10 +46,7 @@ type Client struct {
 
 	Repositories *RepositoriesService
 	PullRequests *PullRequestsService
-
 }
-
-
 
 func (c *Client) NewRequest(method string, urlString string, body interface{}) (*http.Request, error) {
 
@@ -74,7 +69,6 @@ func (c *Client) NewRequest(method string, urlString string, body interface{}) (
 
 	}
 
-
 	req, err := http.NewRequest(method, u, buf)
 
 	if err != nil {
@@ -90,8 +84,7 @@ func (c *Client) NewRequest(method string, urlString string, body interface{}) (
 	return req, nil
 }
 
-func (c *Client) Do(req *http.Request, output interface {}) error {
-
+func (c *Client) Do(req *http.Request, output interface{}) error {
 
 	resp, err := c.client.Do(req)
 

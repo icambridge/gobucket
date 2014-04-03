@@ -1,10 +1,10 @@
 package gobucket
 
 import (
-	"net/http"
-	"testing"
 	"fmt"
+	"net/http"
 	"reflect"
+	"testing"
 )
 
 func TestRepositoriesService_Get(t *testing.T) {
@@ -12,11 +12,11 @@ func TestRepositoriesService_Get(t *testing.T) {
 	defer tearDown()
 
 	mux.HandleFunc("/2.0/repositories/batman/cave-system", func(w http.ResponseWriter, r *http.Request) {
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			fmt.Fprint(w, `{"Name":"Cave System"}`)
-		})
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		fmt.Fprint(w, `{"Name":"Cave System"}`)
+	})
 
 	req, _ := client.Repositories.Get("batman", "cave-system")
 
@@ -28,16 +28,15 @@ func TestRepositoriesService_Get(t *testing.T) {
 
 }
 
-
 func TestRepositoriesService_GetAll(t *testing.T) {
 	setUp()
 	defer tearDown()
 
 	mux.HandleFunc("/2.0/repositories/batman", func(w http.ResponseWriter, r *http.Request) {
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			if r.URL.Query().Get("page") == "1" {
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		if r.URL.Query().Get("page") == "1" {
 			fmt.Fprint(w, `{
   "pagelen": 10,
   "next": "https://bitbucket.org/api/2.0/repositories/batman?page=2",
@@ -76,7 +75,7 @@ func TestRepositoriesService_GetAll(t *testing.T) {
   "page": 1,
   "size": 11
 }`)
-			} else {
+		} else {
 			fmt.Fprint(w, `{
   "pagelen": 1,
   "values": [
@@ -87,8 +86,8 @@ func TestRepositoriesService_GetAll(t *testing.T) {
   "page": 2,
   "size": 11
 }`)
-			}
-		})
+		}
+	})
 
 	resp, err := client.Repositories.GetAll("batman")
 
@@ -96,7 +95,7 @@ func TestRepositoriesService_GetAll(t *testing.T) {
 		t.Errorf("Expected no err, got %v", err)
 	}
 
-	respLen := len(resp);
+	respLen := len(resp)
 
 	if respLen != 11 {
 		t.Errorf("Response length = %v, expected %v", respLen, 11)
@@ -121,7 +120,6 @@ func TestRepositoriesService_GetAll(t *testing.T) {
 	}
 
 }
-
 
 func TestRepositoriesService_GetBranches(t *testing.T) {
 	setUp()
@@ -152,15 +150,14 @@ func TestRepositoriesService_GetBranches(t *testing.T) {
 	}`
 	mux.HandleFunc("/1.0/repositories/batman/cave-system/branches", func(w http.ResponseWriter, r *http.Request) {
 
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			fmt.Fprint(w, json)
-			apiHit = true
-		},
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		fmt.Fprint(w, json)
+		apiHit = true
+	},
 	)
 	branches, err := client.Repositories.GetBranches("batman", "cave-system")
-
 
 	if apiHit == false {
 		t.Error("Api wasn't hit")
@@ -177,23 +174,23 @@ func TestRepositoriesService_GetBranches(t *testing.T) {
 	value, ok := branches["bug/RECOG-1302"]
 
 	if ok != true {
-		t.Error("Branch 'bug/RECOG-1302' didn't exist",)
+		t.Error("Branch 'bug/RECOG-1302' didn't exist")
 	}
 
 	expected := &Branch{
-		Node:  "66b2d310a3de",
+		Node: "66b2d310a3de",
 		Files: []File{
 			File{Type: "modified", File: "src/Workstars/Recognition/ClientUserBundle/Tests/Functional/Controller/Recognition/MakeFunctionalTest.php"},
 		},
-		RawAuthor: "Matthew Rowland <matthew.rowland@workstars.com>",
+		RawAuthor:    "Matthew Rowland <matthew.rowland@workstars.com>",
 		UtcTimestamp: "2014-03-03 15:49:49+00:00",
-		Author: "roloking1806",
-		Timestamp: "2014-03-03 16:49:49",
-		RawNode: "66b2d310a3de8e1f0add3b2c2aadaa3b3f130fed",
-		Parents: []string{"6f14ddaed98f"},
-		Branch: "bug/RECOG-1302",
-		Message: "RECOG-1302 - Add functional tests to ensure cross country/org unit recognitions save correctly.\n",
-		Size: -1,
+		Author:       "roloking1806",
+		Timestamp:    "2014-03-03 16:49:49",
+		RawNode:      "66b2d310a3de8e1f0add3b2c2aadaa3b3f130fed",
+		Parents:      []string{"6f14ddaed98f"},
+		Branch:       "bug/RECOG-1302",
+		Message:      "RECOG-1302 - Add functional tests to ensure cross country/org unit recognitions save correctly.\n",
+		Size:         -1,
 	}
 
 	if !reflect.DeepEqual(value, expected) {

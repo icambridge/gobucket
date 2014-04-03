@@ -1,13 +1,13 @@
 package gobucket
 
 import (
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"io/ioutil"
-	"testing"
-	"fmt"
 	"reflect"
+	"testing"
 )
 
 var (
@@ -110,7 +110,6 @@ func TestClientNewRequest_String(t *testing.T) {
 	}
 }
 
-
 func TestDo_GET(t *testing.T) {
 	setUp()
 	defer tearDown()
@@ -120,11 +119,11 @@ func TestDo_GET(t *testing.T) {
 	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			if m := "GET"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			fmt.Fprint(w, `{"Bar":"drink"}`)
-		})
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		fmt.Fprint(w, `{"Bar":"drink"}`)
+	})
 
 	req, _ := client.NewRequest("GET", "/", nil)
 	body := new(Foo)
@@ -147,11 +146,11 @@ func TestDo_POST(t *testing.T) {
 	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			if m := "POST"; m != r.Method {
-				t.Errorf("Request method = %v, expected %v", r.Method, m)
-			}
-			fmt.Fprint(w, `{"Bar":"drink"}`)
-		})
+		if m := "POST"; m != r.Method {
+			t.Errorf("Request method = %v, expected %v", r.Method, m)
+		}
+		fmt.Fprint(w, `{"Bar":"drink"}`)
+	})
 
 	req, _ := client.NewRequest("POST", "/", nil)
 	body := new(Foo)
